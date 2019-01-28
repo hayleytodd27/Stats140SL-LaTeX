@@ -1,0 +1,123 @@
+---
+title: "Stats 140SL LaTeX Assignment"
+author: "Hayley Todd"
+date: "October 18th, 2018"
+output:
+  pdf_document:
+    latex_engine: xelatex
+    number_sections: yes
+    toc: yes
+    toc_depth: 3
+header-includes:
+- \usepackage{enumitem}
+- \usepackage{graphicx}
+- \usepackage{fontspec}
+- \usepackage{color}
+- \usepackage{amsmath ,amssymb ,amsthm}
+- \setmainfont{Roboto-Regular}
+- \setsansfont{RobotoCondensed-BoldItalic}
+---
+\newpage
+#Introduction
+
+In this document I will be showcasing my ability to use \LaTeX\ in R while also telling you about my home state of {\large Arizona} and some other R code. 
+
+#Growing Up
+
+In this section I will talk about growing up in Arizona, specifically my family and my animals.
+
+##My Family
+
+I was born in **Scottsdale** in **1997**. I have \textit{1 older brother} who went to **\textsf{Northern Arizona University}**. He is now a member of the \textit{US Air Force}. Here is a table with more information on my family.
+
+```{r}
+ournames <- c("Hayley","Chase","Ron","Suzette")
+ourages <- c(21,30,70,60)
+oursex <- c("F","M","M","F")
+famdata <- data.frame(ournames,ourages,oursex)
+library("xtable")
+xtable(famdata)
+```
+
+##My Animals
+
+I owned a bunch of rescue animals growing up. Those animals included:
+\begin{enumerate}[label=(\roman*)]
+\item Horses
+\item Donkeys
+\item Pigs
+\item A Sheep
+\item Dogs
+\item Cats
+\item **and a Llama**
+\end{enumerate}
+
+These are the animals we currently own:
+\begin{itemize}[$\ast$]
+\item Two dogs
+\item Two cats
+\end{itemize}
+
+#About Arizona
+
+Arizona's state flag is \textcolor{red}{red}, \textcolor{blue}{blue}, and \textcolor{yellow}{yellow}. It is shown below.
+\includegraphics[width=0.5\linewidth]{arizonaflag} 
+
+#Some R Code with a splash of Greek
+
+Let's look at a data set in R that shows the Math scores from Texas Assessment of Academic Skills. 
+
+```{r, echo = FALSE}
+data(tli)
+head(tli)
+```
+
+##Some computations
+
+Lets find the average score among women and men.
+
+```{r}
+womentli <- subset(tli, sex == "F")
+mentli <- subset(tli, sex == "M")
+paste0("The average score among women was ",mean(womentli$tlimth)," and among men was ",mean(mentli$tlimth),".")
+```
+
+##Some plots
+
+We could also plot the frequencies of scores among various races. 
+
+```{r, echo = FALSE}
+hispanictli <- subset(tli, ethnicty == "HISPANIC")
+hist(hispanictli$tlimth, main = "Frequency of Scores for Hispanic Ethnicity")
+```
+
+```{r, echo = FALSE}
+whitetli <- subset(tli, ethnicty == "WHITE")
+hist(whitetli$tlimth, main = "Frequency of Scores for White Ethnicity")
+```
+
+```{r, echo = FALSE}
+blacktli <- subset(tli, ethnicty == "BLACK")
+hist(blacktli$tlimth, main = "Frequency of Scores for Black Ethnicity")
+```
+
+##A nice table
+
+We can also observe the different means and standard deviations based on grade level.
+
+```{r, echo = FALSE}
+library(stargazer)
+grade3 <- subset(tli, grade == 3)
+grade4 <- subset(tli, grade == 4)
+grade5 <- subset(tli, grade == 5)
+grade6 <- subset(tli, grade == 6)
+grade7 <- subset(tli, grade == 7)
+grade8 <- subset(tli, grade == 8)
+
+tlimeans <- c(mean(grade3$tlimth), mean(grade4$tlimth), mean(grade5$tlimth), mean(grade6$tlimth), mean(grade7$tlimth), mean(grade8$tlimth))
+
+grades <- c(3:8)
+tlidata <- data.frame(grades,tlimeans)
+stargazer(tlidata, title = "Math Score Means Based on Grade Level")
+```
+
